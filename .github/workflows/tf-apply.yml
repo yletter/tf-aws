@@ -27,6 +27,10 @@ on:
 
 env:
   TF_VAR_key_name: test_key
+  TF_VAR_workstation_ip: test_key
+  TF_VAR_availability_zones: '["us-east-1a", "us-east-1b"]'
+  TF_VAR_instance_type: "t2.micro"
+  TF_VAR_region: "us-east-1"
 
 jobs:
   terraform:
