@@ -1,0 +1,15 @@
+Login as the domain admin
+
+admin@CADEVOPS
+terraform output --raw domain_admin_password
+
+==================
+
+EC2 Userdata debugging
+
+Note: By default, C:\ProgramData is a hidden folder.
+C:\ProgramData\Amazon\EC2Launch\log\agent.log
+
+==================
+
+systeminfo | findstr /B "Domain"
