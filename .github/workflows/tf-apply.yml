@@ -50,7 +50,10 @@ jobs:
     - name: AWS 
       shell: bash
       run: |
-        env
+        echo "PWDD"
+        pwd
+        echo "LSS"
+        ls -R
         aws s3 ls
 
     - name: Terraform Init
