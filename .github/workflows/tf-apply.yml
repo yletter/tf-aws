@@ -24,6 +24,10 @@ on:
           - 'exercise08'
           - 'exercise09'
           - 'exercise10'
+
+env:
+  TF_VAR_key_name: test_key
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
