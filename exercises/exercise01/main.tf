@@ -1,15 +1,16 @@
 terraform {
-  required_version = ">= 1.5"
+  required_version = ">= 1.8"
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 5.50"
     }
   }
 }
 
 provider "aws" {
-  region = "us-west-2"
+  region = "us-east-1"
 }
 
 resource "aws_vpc" "main" {
