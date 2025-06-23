@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./exercises/${{ github.event.inputs.environment }}
+        working-directory: ./exercises/${{ github.event.inputs.excercise }}
 
     steps:
     - name: Checkout code
