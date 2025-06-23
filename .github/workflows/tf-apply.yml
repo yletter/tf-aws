@@ -1,0 +1,74 @@
+name: Terraform AWS Apply
+
+on:
+  push:
+    branches:
+      - mainx  # Change this to your main branch name if different
+  repository_dispatch:
+    types: [trigger-tf-apply]
+  workflow_dispatch:
+    inputs:
+      excercise:
+        description: 'Run Excercise?'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+          - 'excercise01'
+          - 'excercise02'
+          - 'excercise03'
+          - 'excercise04'
+          - 'excercise05'
+          - 'excercise06'
+          - 'excercise07'
+          - 'excercise08'
+          - 'excercise09'
+          - 'excercise10'
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./${{ github.event.inputs.environment }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.1.7
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: AWS 
+      shell: bash
+      run: |
+        env
+        aws s3 ls
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan -out=tfplan
+
+    - name: Get Terraform output
+      run: |
+        terraform output -raw
+
+    - name: Archive Terraform Plan
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: tfplan
+        path: terraform/tfplan
