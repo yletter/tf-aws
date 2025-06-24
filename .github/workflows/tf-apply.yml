@@ -75,7 +75,7 @@ jobs:
 
     - name: Get Terraform output
       run: |
-        terraform output -raw
+        terraform output -raw aws_vpc.main.name
 
     - name: Archive Terraform Plan
       if: always()
