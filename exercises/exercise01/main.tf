@@ -110,7 +110,7 @@ resource "aws_security_group" "webserver" {
 }
 
 resource "aws_instance" "web" {
-  ami                    = var.amis[var.region]
+  ami                    = data.aws_ami.amazon_linux_useast1.id # var.amis[var.region]
   instance_type          = var.instance_type
   key_name               = var.key_name
   subnet_id              = aws_subnet.subnet1.id
