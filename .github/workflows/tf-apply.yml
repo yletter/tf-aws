@@ -77,6 +77,12 @@ jobs:
       run: |
         terraform output -raw aws_vpc.main.name
 
+    - name: Terraform Plan
+      run: terraform plan -out=tfplan
+      
+    - name: Terraform Apply
+      run: terraform apply --auto-approve tfplan
+
     - name: Archive Terraform Plan
       if: always()
       uses: actions/upload-artifact@v4
