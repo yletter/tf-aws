@@ -51,10 +51,10 @@ data "aws_ami" "amazon_linux_useast2" {
   region = "us-east-2" # Optional; usually set in provider block
 }
 
-variable "amis" {
-  type = map(any)
-  default = {
-    "us-east-1" : data.aws_ami.amazon_linux_useast1.id
-    "us-east-2" : data.aws_ami.amazon_linux_useast2.id
-  }
-}
+# variable "amis" {
+#   type = map(any)
+#   default = {
+#     "us-east-1" : data.aws_ami.amazon_linux_useast1.id
+#     "us-east-2" : data.aws_ami.amazon_linux_useast2.id
+#   }
+# }
