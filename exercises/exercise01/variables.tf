@@ -17,10 +17,44 @@ variable "workstation_ip" {
   type = string
 }
 
+data "aws_ami" "amazon_linux_useast1" {
+  most_recent = true
+  owners      = ["amazon"] # Amazon's official AMIs
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  region = "us-east-1" # Optional; usually set in provider block
+}
+
+data "aws_ami" "amazon_linux_useast2" {
+  most_recent = true
+  owners      = ["amazon"] # Amazon's official AMIs
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  region = "us-east-2" # Optional; usually set in provider block
+}
+
 variable "amis" {
   type = map(any)
   default = {
-    "us-east-2" : "ami-08e6b682a466887dd"
-    "us-west-2" : "ami-0af6e2b3ada249943"
+    "us-east-1" : data.aws_ami.amazon_linux_useast1.id
+    "us-east-2" : data.aws_ami.amazon_linux_useast2.id
   }
 }
