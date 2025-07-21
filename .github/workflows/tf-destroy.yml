@@ -81,7 +81,7 @@ jobs:
       run: terraform plan -out=tfplan
       
     - name: Terraform Apply
-      run: terraform destroy --auto-approve tfplan
+      run: terraform destroy --auto-approve
 
     - name: Archive Terraform Plan
       if: always()
