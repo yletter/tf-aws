@@ -26,7 +26,7 @@ on:
           - 'exercise10'
 
 env:
-  TF_VAR_key_name: test_key
+  TF_VAR_key_name: keypairNov2024
   TF_VAR_workstation_ip: "0.0.0.0/0"
   TF_VAR_availability_zones: '["us-east-1a", "us-east-1b"]'
   TF_VAR_instance_type: "t2.micro"
