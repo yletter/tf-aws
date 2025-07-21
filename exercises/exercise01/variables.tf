@@ -30,8 +30,6 @@ data "aws_ami" "amazon_linux_useast1" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
-
-  region = "us-east-1" # Optional; usually set in provider block
 }
 
 data "aws_ami" "amazon_linux_useast2" {
@@ -47,8 +45,6 @@ data "aws_ami" "amazon_linux_useast2" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
-
-  region = "us-east-2" # Optional; usually set in provider block
 }
 
 # variable "amis" {
