@@ -63,6 +63,7 @@ jobs:
         echo "LSS"
         ls -R
         aws s3 ls
+        env
 
     - name: Terraform Init
       run: terraform init
