@@ -3,6 +3,6 @@ terraform {
     bucket = "tf-state-yuvaraj"
     region = "us-east-1"
     key = "exercise0/terraform.tfstate"
-    profile = "saml"
+    #profile = "saml"
   }
 }
