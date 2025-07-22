@@ -130,9 +130,8 @@ cd /usr/share/nginx/html
 git clone https://github.com/cloudacademy/webgl-globe/ ./web
 cp -a web/src/* .
 rm -rf {.git,*.md,src,conf.d,docs,Dockerfile,index.nginx-debian.html}
-
-systemctl restart nginx
-systemctl status nginx
+systemctl start nginx
+systemctl enable nginx
 
 echo fin v1.00!
 EOF
