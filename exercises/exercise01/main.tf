@@ -121,13 +121,14 @@ resource "aws_instance" "web" {
   #userdata
   user_data = <<EOF
 #!/bin/bash
-apt-get -y update
-apt-get -y install nginx
+sudo amazon-linux-extras enable nginx1
+sudo yum install -y nginx
+sudo yum install -y git
 
-cd /var/www/html
-rm *.html
-git clone https://github.com/cloudacademy/webgl-globe/ .
-cp -a src/* .
+cd /usr/share/nginx/html
+
+git clone https://github.com/cloudacademy/webgl-globe/ ./web
+cp -a web/src/* .
 rm -rf {.git,*.md,src,conf.d,docs,Dockerfile,index.nginx-debian.html}
 
 systemctl restart nginx
