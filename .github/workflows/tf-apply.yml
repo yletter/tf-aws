@@ -74,10 +74,6 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -out=tfplan
 
-    - name: Get Terraform output
-      run: |
-        terraform output -raw aws_vpc.main.name
-
     - name: Terraform Plan
       run: terraform plan -out=tfplan
       
