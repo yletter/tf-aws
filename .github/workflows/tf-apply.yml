@@ -79,9 +79,6 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -out=tfplan
 
-    - name: Terraform Plan
-      run: terraform plan -out=tfplan
-      
     - name: Terraform Apply
       run: terraform apply --auto-approve tfplan
 

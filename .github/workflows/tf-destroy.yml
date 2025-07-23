@@ -78,13 +78,6 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -out=tfplan
 
-    - name: Get Terraform output
-      run: |
-        terraform output -raw vpc_id
-
-    - name: Terraform Plan
-      run: terraform plan -out=tfplan
-      
     - name: Terraform Apply
       run: terraform destroy --auto-approve
 
