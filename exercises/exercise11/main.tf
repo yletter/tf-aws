@@ -43,8 +43,8 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
 # Zip Lambda Function
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_file = "${path.module}/handler.py"
-  output_path = "${path.module}/handler.zip"
+  source_file = "${path.module}/lambda/handler.py"
+  output_path = "${path.module}/lambda/handler.zip"
 }
 
 resource "aws_lambda_function" "my_lambda" {
