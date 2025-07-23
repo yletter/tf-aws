@@ -40,15 +40,22 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role       = aws_iam_role.lambda_role.name
 }
 
+# Zip Lambda Function
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_file = "${path.module}/handler.py"
+  output_path = "${path.module}/handler.zip"
+}
+
 resource "aws_lambda_function" "my_lambda" {
   function_name = "my_lambda_function"
 
   role          = aws_iam_role.lambda_role.arn
   handler       = "handler.lambda_handler"
   runtime       = "python3.8"
-  filename      = "lambda/handler.zip"
+  filename      = data.archive_file.lambda_zip.output_path
   
-  source_code_hash = filebase64sha256("lambda/handler.zip")
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 }
 
 resource "aws_api_gateway_rest_api" "api" {
