@@ -24,6 +24,11 @@ on:
           - 'exercise08'
           - 'exercise09'
           - 'exercise10'
+          - 'exercise11'
+          - 'exercise12'
+          - 'exercise13'
+          - 'exercise14'
+          - 'exercise15'
 
 env:
   TF_VAR_key_name: keypairNov2024
