@@ -58,14 +58,6 @@ resource "aws_lambda_function" "my_lambda" {
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 }
 
-resource "aws_lambda_function_version" "lambda_version" {
-  function_name = aws_lambda_function.my_lambda.arn
-
-  # Optional description
-  description = "Version deployed on ${timestamp()}"
-}
-
-
 resource "aws_api_gateway_rest_api" "api" {
   name        = "MyAPI"
   description = "API for my Lambda function"
