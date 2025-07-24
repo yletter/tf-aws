@@ -25,7 +25,7 @@ def lambda_handler(event, context):
     # Example processing logic
     response = {
         "statusCode": 200,
-        "body": "Hello from Lambda!" + user_agent
+        "body": "New version - Hello from Lambda!" + user_agent
     }
     
     return response
