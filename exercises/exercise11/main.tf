@@ -54,7 +54,7 @@ resource "aws_lambda_function" "my_lambda" {
   handler       = "handler.lambda_handler"
   runtime       = "python3.8"
   filename      = data.archive_file.lambda_zip.output_path
-  
+  publish       = true
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 }
 
