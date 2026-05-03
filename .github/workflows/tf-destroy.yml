@@ -39,6 +39,7 @@ env:
 
 jobs:
   terraform:
+    name: Terraform Destroy - ${{ github.event.inputs.exercise || 'Auto' }}
     runs-on: ubuntu-latest
     defaults:
       run:
