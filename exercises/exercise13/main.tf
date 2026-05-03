@@ -39,7 +39,18 @@ resource "aws_subnet" "subnet2" {
   availability_zone = var.availability_zones[1]
 
   tags = {
-    Name = "Subnet2"
+    Name = "Customer subnet"
+    Type = "Private"
+  }
+}
+
+resource "aws_subnet" "subnet4" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.4.0/24"
+  availability_zone = var.availability_zones[2]
+
+  tags = {
+    Name = "Firewall subnet"
     Type = "Public"
   }
 }
@@ -66,6 +77,33 @@ resource "aws_route_table" "rt1" {
   }
 }
 
+resource "aws_route_table" "rt2" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+    # vpc_endpoint_id = 
+  }
+
+  tags = {
+    Name = "Public"
+  }
+}
+
+resource "aws_route_table" "rt4" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+
+  tags = {
+    Name = "Public"
+  }
+}
+
 resource "aws_route_table_association" "rta1" {
   subnet_id      = aws_subnet.subnet1.id
   route_table_id = aws_route_table.rt1.id
@@ -73,7 +111,12 @@ resource "aws_route_table_association" "rta1" {
 
 resource "aws_route_table_association" "rta2" {
   subnet_id      = aws_subnet.subnet2.id
-  route_table_id = aws_route_table.rt1.id
+  route_table_id = aws_route_table.rt2.id
+}
+
+resource "aws_route_table_association" "rta4" {
+  subnet_id      = aws_subnet.subnet4.id
+  route_table_id = aws_route_table.rt4.id
 }
 
 resource "aws_security_group" "webserver" {
