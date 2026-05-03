@@ -82,12 +82,12 @@ resource "aws_route_table" "rt2" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.main.id
-    # vpc_endpoint_id = 
+    # gateway_id = aws_internet_gateway.main.id
+    vpc_endpoint_id = "vpce-03c582355dcfa868e"
   }
 
   tags = {
-    Name = "Public"
+    Name = "Private"
   }
 }
 
@@ -181,5 +181,38 @@ EOF
 
   tags = {
     Name = "CloudAcademy"
+  }
+}
+
+
+resource "aws_instance" "web" {
+  ami                    = data.aws_ami.amazon_linux_useast1.id # var.amis[var.region]
+  instance_type          = var.instance_type
+  key_name               = var.key_name
+  subnet_id              = aws_subnet.subnet2.id
+  vpc_security_group_ids = [aws_security_group.webserver.id]
+
+  associate_public_ip_address = true
+
+  #userdata
+  user_data = <<EOF
+#!/bin/bash
+sudo amazon-linux-extras enable nginx1
+sudo yum install -y nginx
+sudo yum install -y git
+
+cd /usr/share/nginx/html
+
+git clone https://github.com/cloudacademy/webgl-globe/ ./web
+cp -a web/src/* .
+rm -rf {.git,*.md,src,conf.d,docs,Dockerfile,index.nginx-debian.html}
+systemctl start nginx
+systemctl enable nginx
+
+echo fin v1.00!
+EOF
+
+  tags = {
+    Name = "CloudAcademy v2"
   }
 }
