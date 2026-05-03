@@ -185,7 +185,7 @@ EOF
 }
 
 
-resource "aws_instance" "web" {
+resource "aws_instance" "web2" {
   ami                    = data.aws_ami.amazon_linux_useast1.id # var.amis[var.region]
   instance_type          = var.instance_type
   key_name               = var.key_name
