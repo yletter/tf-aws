@@ -1,38 +1,34 @@
 # Stateless Inspection - Network Firewall Rule
 
-resource "aws_networkfirewall_rule_group" "NetworkFirewallStatelessRule" {
-  description = "Stateless Rate Limiting Rule"
+resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
+  description = "Network Firewall Stateless Rule"
   capacity    = 100
-  name        = "NetworkFirewallStatelessRule"
+  name        = "Network Firewall Stateless Rule"
   type        = "STATELESS"
   rule_group {
     rules_source {
       stateless_rules_and_custom_actions {
         stateless_rule {
-          priority = 1
+          priority = 100
           rule_definition {
-            # actions = ["aws:pass"]
-            actions = ["aws:forward_to_sfe"]
+            actions = ["aws:pass"]
+            # actions = ["aws:forward_to_sfe"]
             match_attributes {
               source {
-                address_definition = "10.0.0.0/16"
+                address_definition = "0.0.0.0/0"
               }
               source_port {
-                from_port = 80
-                to_port   = 80
+                from_port = 1
+                to_port   = 65535
               }
               destination {
                 address_definition = "0.0.0.0/0"
               }
               destination_port {
-                from_port = 80
-                to_port   = 80
+                from_port = 1
+                to_port   = 65535
               }
               protocols = [6]
-              tcp_flag {
-                flags = ["SYN"]
-                masks = ["SYN", "ACK"]
-              }
             }
           }
         }
@@ -41,85 +37,69 @@ resource "aws_networkfirewall_rule_group" "NetworkFirewallStatelessRule" {
   }
 
   tags = {
-    Tag1 = "StatelessRules"
+    Name = "Stateless Rules"
   }
 }
 # Stateful Inspection for permitting packets from a source IP address
-resource "aws_networkfirewall_rule_group" "networkfirewallRG" {
+resource "aws_networkfirewall_rule_group" "network_firewall_stateful_rule" {
   capacity    = 50
   description = "Permits http traffic from source"
-  name        = "networkfirewallRG"
+  name        = "Network Firewall Stateful Rule"
   type        = "STATEFUL"
   rule_group {
     rules_source {
-      dynamic "stateful_rule" {
-        for_each = local.ips
-        content {
-          action = "PASS"
-          header {
-            destination      = "ANY"
-            destination_port = "ANY"
-            protocol         = "HTTP"
-            direction        = "ANY"
-            source_port      = "ANY"
-            source           = stateful_rule.value
-          }
-          rule_option {
-            keyword  = "sid"
-            settings = ["1"]
-          }
-        }
+      rules_source_list {
+        generated_rules_type = "ALLOWLIST"
+        target_types         = ["TLS_SNI", "HTTP_HOST"]
+        targets              = ["*.google.com", "*.github.com"]
       }
     }
   }
 
   tags = {
-    Name = "permit HTTP from source"
+    Name = "Permit HTTP from Source"
   }
 }
 
-locals {
-  ips = ["10.0.0.0/16"]
-}
-
-resource "aws_networkfirewall_firewall_policy" "networkfirewallPolicy" {
-  name = "networkfirewallPolicy"
+resource "aws_networkfirewall_firewall_policy" "network_firewall_policy" {
+  name = "Network Firewall Policy"
 
   firewall_policy {
-    stateless_default_actions = ["aws:forward_to_sfe"]
-    # stateless_default_actions          = ["aws:pass"]
+    # stateless_default_actions = ["aws:forward_to_sfe"]
+    stateless_default_actions          = ["aws:drop"]
     stateless_fragment_default_actions = ["aws:drop"]
 
     stateless_rule_group_reference {
       priority     = 1
-      resource_arn = aws_networkfirewall_rule_group.NetworkFirewallStatelessRule.arn
+      resource_arn = aws_networkfirewall_rule_group.network_firewall_stateless_rule.arn
     }
     stateful_rule_group_reference {
-      resource_arn = aws_networkfirewall_rule_group.networkfirewallRG.arn
+      resource_arn = aws_networkfirewall_rule_group.network_firewall_stateful_rule.arn
     }
   }
 
   tags = {
-    Name = "networkfirewallPolicy"
+    Name = "Network Firewall Policy"
   }
 }
 
-resource "aws_networkfirewall_firewall" "networkfirewall2" {
-  name                = "VPCnetworkfirewall"
-  firewall_policy_arn = aws_networkfirewall_firewall_policy.networkfirewallPolicy.arn
+resource "aws_networkfirewall_firewall" "network_firewall" {
+  name                = "VPC Network Firewall"
+  description         = "VPC Network Firewall"
+  firewall_policy_arn = aws_networkfirewall_firewall_policy.network_firewall_policy.arn
   vpc_id              = aws_vpc.main.id
 
   subnet_mapping {
     subnet_id = aws_subnet.subnet4.id
   }
   tags = {
-    Name = "networkfirewall2"
+    Name = "VPC Network Firewall"
   }
 }
 
 locals {
   vpc_endpoints = flatten([
-    for sync_state in toset(aws_networkfirewall_firewall.networkfirewall2.firewall_status[0].sync_states) :
+    for sync_state in toset(aws_networkfirewall_firewall.network_firewall.firewall_status[0].sync_states) :
     [for attachment in tolist(sync_state.attachment) :
       {
         endpoint_id       = attachment.endpoint_id

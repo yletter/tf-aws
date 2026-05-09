@@ -28,7 +28,7 @@ resource "aws_subnet" "subnet1" {
   availability_zone = var.availability_zones[0]
 
   tags = {
-    Name = "Subnet1"
+    Name = "Public Subnet"
     Type = "Public"
   }
 }
@@ -39,7 +39,7 @@ resource "aws_subnet" "subnet2" {
   availability_zone = var.availability_zones[0]
 
   tags = {
-    Name = "Customer subnet"
+    Name = "Private Subnet"
     Type = "Private"
   }
 }
@@ -50,7 +50,7 @@ resource "aws_subnet" "subnet4" {
   availability_zone = var.availability_zones[0]
 
   tags = {
-    Name = "Firewall subnet"
+    Name = "Firewall Subnet"
     Type = "Public"
   }
 }
@@ -195,13 +195,13 @@ echo fin v1.00!
 EOF
 
   tags = {
-    Name = "CloudAcademy"
+    Name = "Web Server Public"
   }
 }
 
 
 resource "aws_instance" "web2" {
-  ami                    = data.aws_ami.amazon_linux_useast1.id # var.amis[var.region]
+  ami                    = data.aws_ami.amazon_linux_useast1.id
   instance_type          = var.instance_type
   key_name               = var.key_name
   subnet_id              = aws_subnet.subnet2.id
@@ -228,6 +228,6 @@ echo fin v1.00!
 EOF
 
   tags = {
-    Name = "CloudAcademy v2"
+    Name = "Web Server Network Firewall"
   }
 }
