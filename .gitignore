@@ -63,3 +63,4 @@ resource.syso
 *.syso
 !.gitignore
 !terragrunt.stack.hcl
+*firewall.drawio*

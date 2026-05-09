@@ -36,7 +36,7 @@ resource "aws_subnet" "subnet1" {
 resource "aws_subnet" "subnet2" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.2.0/24"
-  availability_zone = var.availability_zones[1]
+  availability_zone = var.availability_zones[0]
 
   tags = {
     Name = "Customer subnet"
@@ -47,7 +47,7 @@ resource "aws_subnet" "subnet2" {
 resource "aws_subnet" "subnet4" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.4.0/24"
-  availability_zone = var.availability_zones[2]
+  availability_zone = var.availability_zones[0]
 
   tags = {
     Name = "Firewall subnet"
@@ -68,12 +68,17 @@ resource "aws_route_table" "rt1" {
   vpc_id = aws_vpc.main.id
 
   route {
+    cidr_block = aws_vpc.main.cidr_block
+    gateway_id = "local"
+  }
+
+  route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.main.id
   }
 
   tags = {
-    Name = "Public"
+    Name = "Public Route Table"
   }
 }
 
@@ -81,13 +86,18 @@ resource "aws_route_table" "rt2" {
   vpc_id = aws_vpc.main.id
 
   route {
+    cidr_block = aws_vpc.main.cidr_block
+    gateway_id = "local"
+  }
+
+  route {
     cidr_block = "0.0.0.0/0"
     # gateway_id = aws_internet_gateway.main.id
-    vpc_endpoint_id = "vpce-03c582355dcfa868e"
+    vpc_endpoint_id = local.vpc_endpoints[0].endpoint_id
   }
 
   tags = {
-    Name = "Private"
+    Name = "Private Route Table"
   }
 }
 
@@ -95,12 +105,17 @@ resource "aws_route_table" "rt4" {
   vpc_id = aws_vpc.main.id
 
   route {
+    cidr_block = aws_vpc.main.cidr_block
+    gateway_id = "local"
+  }
+
+  route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.main.id
   }
 
   tags = {
-    Name = "Public"
+    Name = "Public Network Route Table"
   }
 }
 
@@ -148,7 +163,7 @@ resource "aws_security_group" "webserver" {
   }
 
   tags = {
-    Name = "Allow traffic"
+    Name = "Webserver Security Group"
   }
 }
 
