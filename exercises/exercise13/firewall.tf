@@ -3,7 +3,7 @@
 resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
   description = "Network Firewall Stateless Rule"
   capacity    = 100
-  name        = "Network Firewall Stateless Rule"
+  name        = "Network-Firewall-Stateless-Rule"
   type        = "STATELESS"
   rule_group {
     rules_source {
@@ -37,14 +37,14 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
   }
 
   tags = {
-    Name = "Stateless Rules"
+    Name = "Network-Firewall-Stateless-Rule"
   }
 }
 # Stateful Inspection for permitting packets from a source IP address
 resource "aws_networkfirewall_rule_group" "network_firewall_stateful_rule" {
   capacity    = 50
   description = "Permits http traffic from source"
-  name        = "Network Firewall Stateful Rule"
+  name        = "Network-Firewall-Stateful-Rule"
   type        = "STATEFUL"
   rule_group {
     rules_source {
@@ -57,7 +57,7 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateful_rule" {
   }
 
   tags = {
-    Name = "Permit HTTP from Source"
+    Name = "Network-Firewall-Stateful-Rule"
   }
 }
 
