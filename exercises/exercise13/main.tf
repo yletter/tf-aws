@@ -64,6 +64,26 @@ resource "aws_internet_gateway" "main" {
   }
 }
 
+resource "aws_route_table" "igw_rt" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    # Any traffic destined for the Private Subnet...
+    cidr_block = aws_subnet.subnet2.cidr_block
+    # ...must be sent to the Firewall Endpoint first!
+    vpc_endpoint_id = local.vpc_endpoints[0].endpoint_id
+  }
+
+  tags = {
+    Name = "IGW Route Table"
+  }
+}
+
+resource "aws_route_table_association" "igw_rt_assoc" {
+  gateway_id     = aws_internet_gateway.main.id
+  route_table_id = aws_route_table.igw_rt.id
+}
+
 resource "aws_route_table" "rt1" {
   vpc_id = aws_vpc.main.id
 
