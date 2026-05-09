@@ -12,6 +12,30 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
           priority = 100
           rule_definition {
             # actions = ["aws:pass"]
+            actions = ["aws:drop"]
+            # actions = ["aws:forward_to_sfe"]
+            match_attributes {
+              source {
+                address_definition = "0.0.0.0/0"
+              }
+              source_port {
+                from_port = 1
+                to_port   = 65535
+              }
+              destination {
+                address_definition = "0.0.0.0/0"
+              }
+              destination_port {
+                from_port = 443
+                to_port   = 443
+              }
+              protocols = [6]
+            }
+          }
+        }
+        stateless_rule {
+          priority = 500
+          rule_definition {
             actions = ["aws:forward_to_sfe"]
             match_attributes {
               source {
@@ -27,30 +51,6 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
               destination_port {
                 from_port = 80
                 to_port   = 80
-              }
-              protocols = [6]
-            }
-          }
-        }
-        stateless_rule {
-          priority = 500
-          rule_definition {
-            # actions = ["aws:pass"]
-            actions = ["aws:forward_to_sfe"]
-            match_attributes {
-              source {
-                address_definition = "0.0.0.0/0"
-              }
-              source_port {
-                from_port = 1
-                to_port   = 65535
-              }
-              destination {
-                address_definition = "0.0.0.0/0"
-              }
-              destination_port {
-                from_port = 1
-                to_port   = 65535
               }
               protocols = [6]
             }
