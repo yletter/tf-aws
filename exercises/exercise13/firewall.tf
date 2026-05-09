@@ -62,7 +62,7 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateful_rule" {
 }
 
 resource "aws_networkfirewall_firewall_policy" "network_firewall_policy" {
-  name = "Network Firewall Policy"
+  name = "Network-Firewall-Policy"
 
   firewall_policy {
     # stateless_default_actions = ["aws:forward_to_sfe"]
@@ -79,12 +79,12 @@ resource "aws_networkfirewall_firewall_policy" "network_firewall_policy" {
   }
 
   tags = {
-    Name = "Network Firewall Policy"
+    Name = "Network-Firewall-Policy"
   }
 }
 
 resource "aws_networkfirewall_firewall" "network_firewall" {
-  name                = "VPC Network Firewall"
+  name                = "VPC-Network-Firewall"
   description         = "VPC Network Firewall"
   firewall_policy_arn = aws_networkfirewall_firewall_policy.network_firewall_policy.arn
   vpc_id              = aws_vpc.main.id
@@ -93,7 +93,7 @@ resource "aws_networkfirewall_firewall" "network_firewall" {
     subnet_id = aws_subnet.subnet4.id
   }
   tags = {
-    Name = "VPC Network Firewall"
+    Name = "VPC-Network-Firewall"
   }
 }
 
