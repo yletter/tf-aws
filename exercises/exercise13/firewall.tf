@@ -11,23 +11,44 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
         stateless_rule {
           priority = 100
           rule_definition {
-            # actions = ["aws:pass"]
-            actions = ["aws:drop"]
-            # actions = ["aws:forward_to_sfe"]
+            actions = ["aws:forward_to_sfe"]
             match_attributes {
               source {
                 address_definition = "0.0.0.0/0"
               }
               source_port {
-                from_port = 1
+                from_port = 1024
                 to_port   = 65535
               }
               destination {
-                address_definition = "0.0.0.0/0"
+                address_definition = aws_instance.web2.private_ip
               }
               destination_port {
-                from_port = 443
-                to_port   = 443
+                from_port = 80
+                to_port   = 80
+              }
+              protocols = [6]
+            }
+          }
+        }
+        stateless_rule {
+          priority = 200
+          rule_definition {
+            actions = ["aws:forward_to_sfe"]
+            match_attributes {
+              source {
+                address_definition = "0.0.0.0/0"
+              }
+              source_port {
+                from_port = 1024
+                to_port   = 65535
+              }
+              destination {
+                address_definition = aws_instance.web2.private_ip
+              }
+              destination_port {
+                from_port = 22
+                to_port   = 22
               }
               protocols = [6]
             }
@@ -39,41 +60,37 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
             actions = ["aws:forward_to_sfe"]
             match_attributes {
               source {
-                address_definition = "0.0.0.0/0"
+                address_definition = aws_instance.web2.private_ip
               }
               source_port {
-                from_port = 1
-                to_port   = 65535
+                from_port = 80
+                to_port   = 80
               }
               destination {
                 address_definition = "0.0.0.0/0"
-              }
-              destination_port {
-                from_port = 22
-                to_port   = 22
               }
               protocols = [6]
             }
           }
         }
         stateless_rule {
-          priority = 500
+          priority = 400
           rule_definition {
             actions = ["aws:forward_to_sfe"]
             match_attributes {
               source {
-                address_definition = "0.0.0.0/0"
+                address_definition = aws_instance.web2.private_ip
               }
               source_port {
-                from_port = 1
-                to_port   = 65535
+                from_port = 22
+                to_port   = 22
               }
               destination {
                 address_definition = "0.0.0.0/0"
               }
               destination_port {
-                from_port = 80
-                to_port   = 80
+                from_port = 1024
+                to_port   = 65535
               }
               protocols = [6]
             }
