@@ -34,6 +34,29 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
           }
         }
         stateless_rule {
+          priority = 300
+          rule_definition {
+            actions = ["aws:forward_to_sfe"]
+            match_attributes {
+              source {
+                address_definition = "0.0.0.0/0"
+              }
+              source_port {
+                from_port = 1
+                to_port   = 65535
+              }
+              destination {
+                address_definition = "0.0.0.0/0"
+              }
+              destination_port {
+                from_port = 22
+                to_port   = 22
+              }
+              protocols = [6]
+            }
+          }
+        }
+        stateless_rule {
           priority = 500
           rule_definition {
             actions = ["aws:forward_to_sfe"]
