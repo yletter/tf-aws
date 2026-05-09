@@ -11,8 +11,8 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
         stateless_rule {
           priority = 100
           rule_definition {
-            actions = ["aws:pass"]
-            # actions = ["aws:forward_to_sfe"]
+            # actions = ["aws:pass"]
+            actions = ["aws:forward_to_sfe"]
             match_attributes {
               source {
                 address_definition = "0.0.0.0/0"
