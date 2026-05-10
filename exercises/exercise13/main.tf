@@ -236,6 +236,8 @@ sudo amazon-linux-extras enable nginx1
 sudo yum install -y nginx
 sudo yum install -y git
 
+sudo sed -i 's/80;/8080;/g' /etc/nginx/nginx.conf
+
 cd /usr/share/nginx/html
 
 git clone https://github.com/cloudacademy/webgl-globe/ ./web
