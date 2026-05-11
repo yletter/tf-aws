@@ -119,7 +119,7 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateful_rule" {
       rules_source_list {
         generated_rules_type = "ALLOWLIST"
         target_types         = ["TLS_SNI", "HTTP_HOST"]
-        targets              = [".google.com", ".github.com"]
+        targets              = [".google.com", ".github.com", ".amazonaws.com", ".amazonlinux.com"]
       }
     }
   }
