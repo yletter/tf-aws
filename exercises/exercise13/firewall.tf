@@ -70,7 +70,7 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
                 address_definition = "0.0.0.0/0"
               }
               destination_port {
-                from_port = 8080
+                from_port = 22
                 to_port   = 8080
               }
               protocols = [6]
@@ -86,7 +86,7 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
                 address_definition = "0.0.0.0/0"
               }
               source_port {
-                from_port = 8080
+                from_port = 22
                 to_port   = 8080
               }
               destination {
