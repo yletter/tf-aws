@@ -187,47 +187,6 @@ resource "aws_security_group" "webserver" {
   }
 }
 
-resource "aws_security_group" "webserver2" {
-  name        = "Webserver2"
-  description = "Webserver2 network traffic"
-  vpc_id      = aws_vpc.main.id
-
-  ingress {
-    description = "SSH from anywhere"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.workstation_ip]
-  }
-
-  ingress {
-    description = "80 from anywhere"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "8080 from anywhere"
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "Webserver2 Security Group"
-  }
-}
-
 resource "aws_instance" "web" {
   ami                    = data.aws_ami.amazon_linux_useast1.id # var.amis[var.region]
   instance_type          = var.instance_type
@@ -277,8 +236,6 @@ sudo amazon-linux-extras enable nginx1
 sudo yum install -y nginx
 sudo yum install -y git
 
-
-
 cd /usr/share/nginx/html
 
 git clone https://github.com/cloudacademy/webgl-globe/ ./web
@@ -294,4 +251,3 @@ EOF
     Name = "Web Server Network Firewall"
   }
 }
-# sudo sed -i 's/80;/8080;/g' /etc/nginx/nginx.conf
