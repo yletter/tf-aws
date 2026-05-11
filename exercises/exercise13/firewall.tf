@@ -25,7 +25,7 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
               }
               destination_port {
                 from_port = 22
-                to_port   = 8080
+                to_port   = 80
               }
               protocols = [6]
             }
@@ -41,7 +41,7 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
               }
               source_port {
                 from_port = 22
-                to_port   = 8080
+                to_port   = 80
               }
               destination {
                 address_definition = "0.0.0.0/0"
@@ -71,7 +71,7 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
               }
               destination_port {
                 from_port = 22
-                to_port   = 8080
+                to_port   = 80
               }
               protocols = [6]
             }
@@ -87,7 +87,7 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
               }
               source_port {
                 from_port = 22
-                to_port   = 8080
+                to_port   = 80
               }
               destination {
                 address_definition = aws_vpc.main.cidr_block
