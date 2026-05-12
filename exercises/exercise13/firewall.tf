@@ -24,15 +24,61 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
                 address_definition = aws_vpc.main.cidr_block
               }
               destination_port {
-                from_port = 0     #22
-                to_port   = 65535 #80
+                from_port = 22
+                to_port   = 22
               }
               protocols = [6]
             }
           }
         }
         stateless_rule {
-          priority = 200
+          priority = 110
+          rule_definition {
+            actions = ["aws:pass"]
+            match_attributes {
+              source {
+                address_definition = "0.0.0.0/0"
+              }
+              source_port {
+                from_port = 0
+                to_port   = 65535
+              }
+              destination {
+                address_definition = aws_vpc.main.cidr_block
+              }
+              destination_port {
+                from_port = 80
+                to_port   = 80
+              }
+              protocols = [6]
+            }
+          }
+        }
+        stateless_rule {
+          priority = 120
+          rule_definition {
+            actions = ["aws:pass"]
+            match_attributes {
+              source {
+                address_definition = "0.0.0.0/0"
+              }
+              source_port {
+                from_port = 0
+                to_port   = 65535
+              }
+              destination {
+                address_definition = aws_vpc.main.cidr_block
+              }
+              destination_port {
+                from_port = 443
+                to_port   = 443
+              }
+              protocols = [6]
+            }
+          }
+        }
+        stateless_rule {
+          priority = 130
           rule_definition {
             actions = ["aws:pass"]
             match_attributes {
@@ -40,8 +86,8 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
                 address_definition = aws_vpc.main.cidr_block
               }
               source_port {
-                from_port = 0     #22
-                to_port   = 65535 #80
+                from_port = 22
+                to_port   = 22
               }
               destination {
                 address_definition = "0.0.0.0/0"
@@ -55,7 +101,53 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
           }
         }
         stateless_rule {
-          priority = 300
+          priority = 140
+          rule_definition {
+            actions = ["aws:pass"]
+            match_attributes {
+              source {
+                address_definition = aws_vpc.main.cidr_block
+              }
+              source_port {
+                from_port = 80
+                to_port   = 80
+              }
+              destination {
+                address_definition = "0.0.0.0/0"
+              }
+              destination_port {
+                from_port = 0
+                to_port   = 65535
+              }
+              protocols = [6]
+            }
+          }
+        }
+        stateless_rule {
+          priority = 150
+          rule_definition {
+            actions = ["aws:pass"]
+            match_attributes {
+              source {
+                address_definition = aws_vpc.main.cidr_block
+              }
+              source_port {
+                from_port = 443
+                to_port   = 443
+              }
+              destination {
+                address_definition = "0.0.0.0/0"
+              }
+              destination_port {
+                from_port = 0
+                to_port   = 65535
+              }
+              protocols = [6]
+            }
+          }
+        }
+        stateless_rule {
+          priority = 160
           rule_definition {
             actions = ["aws:forward_to_sfe"]
             match_attributes {
@@ -78,7 +170,30 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
           }
         }
         stateless_rule {
-          priority = 400
+          priority = 170
+          rule_definition {
+            actions = ["aws:pass"]
+            match_attributes {
+              source {
+                address_definition = aws_vpc.main.cidr_block
+              }
+              source_port {
+                from_port = 0
+                to_port   = 65535
+              }
+              destination {
+                address_definition = "0.0.0.0/0"
+              }
+              destination_port {
+                from_port = 443
+                to_port   = 443
+              }
+              protocols = [6]
+            }
+          }
+        }
+        stateless_rule {
+          priority = 180
           rule_definition {
             actions = ["aws:forward_to_sfe"]
             match_attributes {
@@ -88,6 +203,29 @@ resource "aws_networkfirewall_rule_group" "network_firewall_stateless_rule" {
               source_port {
                 from_port = 80
                 to_port   = 80
+              }
+              destination {
+                address_definition = aws_vpc.main.cidr_block
+              }
+              destination_port {
+                from_port = 0
+                to_port   = 65535
+              }
+              protocols = [6]
+            }
+          }
+        }
+        stateless_rule {
+          priority = 190
+          rule_definition {
+            actions = ["aws:pass"]
+            match_attributes {
+              source {
+                address_definition = "0.0.0.0/0"
+              }
+              source_port {
+                from_port = 443
+                to_port   = 443
               }
               destination {
                 address_definition = aws_vpc.main.cidr_block
