@@ -210,6 +210,27 @@ resource "aws_cloudwatch_log_group" "ecs_log_group" {
   retention_in_days = 7
 }
 
+resource "null_resource" "delete_task_definition" {
+  triggers = {
+    task_family = aws_ecs_task_definition.app.family
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<EOT
+      ARNS=$(aws ecs list-task-definitions \
+        --family-prefix ${self.triggers.task_family} \
+        --query "taskDefinitionArns[]" \
+        --output text)
+
+      for ARN in $ARNS; do
+        aws ecs deregister-task-definition --task-definition $ARN
+        aws ecs delete-task-definitions --task-definitions $ARN
+      done
+    EOT
+  }
+}
+
 resource "aws_ecs_task_definition" "app" {
   family                   = "${var.cluster_name}-task"
   network_mode             = "awsvpc"
