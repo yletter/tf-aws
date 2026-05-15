@@ -14,7 +14,12 @@ output "web_instance_public_ip" {
   value = aws_instance.web.public_ip
 }
 
-output "web_app_wait_command" {
+output "web_app1_wait_command" {
   value       = "until curl --max-time 5 http://${aws_instance.web.public_ip} >/dev/null 2>&1; do echo preparing...; sleep 5; done; echo; echo -e 'Ready!!'"
+  description = "Test command - tests readiness of the web app"
+}
+
+output "web_app2_wait_command" {
+  value       = "until curl --max-time 5 http://${aws_instance.web2.public_ip} >/dev/null 2>&1; do echo preparing...; sleep 5; done; echo; echo -e 'Ready!!'"
   description = "Test command - tests readiness of the web app"
 }

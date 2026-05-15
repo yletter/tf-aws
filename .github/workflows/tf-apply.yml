@@ -14,6 +14,7 @@ on:
         default: 'test'
         type: choice
         options:
+          - 'exercise14'
           - 'exercise01'
           - 'exercise02'
           - 'exercise03'
