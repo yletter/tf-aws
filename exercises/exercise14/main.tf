@@ -163,6 +163,8 @@ resource "aws_ecs_cluster" "main" {
     name  = "containerInsights"
     value = "enabled"
   }
+  # depends on the null resource
+  depends_on = [null_resource.delete_task_definition]
 }
 
 resource "aws_iam_role" "ecs_task_execution_role" {
