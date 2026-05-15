@@ -234,7 +234,7 @@ resource "aws_ecs_task_definition" "app" {
       environment = [
         {
           name  = "PYTHON_ENV"
-          value = "This is Production Environment"
+          value = "This is Stage Environment"
         }
       ]
       logConfiguration = {
