@@ -29,9 +29,6 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
-  # Ensure ECS service (and its ENIs) are gone before we detach the IGW
-  depends_on = [aws_ecs_service.app]
-
   tags = {
     Name = "${var.cluster_name}-igw"
   }
@@ -124,6 +121,10 @@ resource "aws_lb" "main" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
   subnets            = aws_subnet.public[*].id
+
+  # IGW must exist before a public ALB can be created.
+  # This also ensures correct destroy order: ECS -> Listener -> ALB -> IGW -> VPC
+  depends_on = [aws_internet_gateway.main]
 
   tags = {
     Name = "${var.cluster_name}-alb"
