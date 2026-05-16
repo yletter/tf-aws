@@ -163,8 +163,6 @@ resource "aws_ecs_cluster" "main" {
     name  = "containerInsights"
     value = "enabled"
   }
-  # depends on the null resource
-  depends_on = [null_resource.delete_task_definition]
 }
 
 resource "aws_iam_role" "ecs_task_execution_role" {
@@ -241,6 +239,8 @@ resource "aws_ecs_task_definition" "app" {
   memory                   = "512"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
+  # depends on the null resource
+  depends_on = [null_resource.delete_task_definition]
 
   container_definitions = jsonencode([
     {
@@ -292,6 +292,6 @@ resource "aws_ecs_service" "app" {
   }
 
   depends_on = [
-    aws_lb_listener.http
+    aws_lb_listener.http, aws_ecs_task_definition.app
   ]
 }
