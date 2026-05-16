@@ -29,6 +29,9 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
+  # Ensure ECS service (and its ENIs) are gone before we detach the IGW
+  depends_on = [aws_ecs_service.app]
+
   tags = {
     Name = "${var.cluster_name}-igw"
   }
@@ -277,6 +280,10 @@ resource "aws_ecs_service" "app" {
   desired_count   = 1
   launch_type     = "FARGATE"
 
+  # Allow tasks to be stopped immediately on destroy (no need to keep min healthy)
+  deployment_minimum_healthy_percent = 0
+  deployment_maximum_percent         = 200
+
   network_configuration {
     subnets          = aws_subnet.public[*].id
     security_groups  = [aws_security_group.ecs_tasks.id]
@@ -289,6 +296,6 @@ resource "aws_ecs_service" "app" {
     container_port   = var.container_port
   }
 
-  # depends_on = [aws_lb_listener.http]
-  depends_on = [aws_lb.main]
+  # Listener must exist before service starts; also ensures correct destroy order
+  depends_on = [aws_lb_listener.http]
 }
