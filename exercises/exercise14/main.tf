@@ -229,7 +229,6 @@ resource "null_resource" "delete_task_definition" {
       done
     EOT
   }
-  depends_on = [aws_ecs_task_definition.app]
 }
 
 resource "aws_ecs_task_definition" "app" {
@@ -290,7 +289,6 @@ resource "aws_ecs_service" "app" {
     container_port   = var.container_port
   }
 
-  depends_on = [
-    aws_lb_listener.http, aws_ecs_task_definition.app
-  ]
+  # depends_on = [aws_lb_listener.http]
+  depends_on = [aws_lb.main]
 }
