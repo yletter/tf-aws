@@ -26,7 +26,7 @@ variable "okta_oauth2_client_secret" {
 variable "container_port" {
   description = "The port the container exposes"
   type        = number
-  default     = 8080
+  default     = 3000
 }
 
 variable "host_port" {
