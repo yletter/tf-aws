@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "cluster_name" {
   description = "The name of the ECS cluster"
   type        = string
-  default     = "test-python"
+  default     = "auth0-webapp"
 }
 
 variable "image_uri" {
