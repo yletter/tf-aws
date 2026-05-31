@@ -36,7 +36,6 @@ env:
   TF_VAR_availability_zones: '["us-east-1a", "us-east-1b","us-east-1c"]'
   TF_VAR_instance_type: "t2.micro"
   TF_VAR_region: "us-east-1"
-  TF_VAR_okta_oauth2_client_secret: ${{ secrets.OKTA_OAUTH2_CLIENT_SECRET }}
 jobs:
   terraform:
     name: Terraform Apply - ${{ github.event.inputs.exercise || 'Auto' }}
@@ -44,7 +43,8 @@ jobs:
     defaults:
       run:
         working-directory: exercises/${{ github.event.inputs.exercise }}
-
+    env:
+      TF_VAR_okta_oauth2_client_secret: ${{ secrets.OKTA_OAUTH2_CLIENT_SECRET }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -78,9 +78,13 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
+      env:
+        TF_VAR_okta_oauth2_client_secret: ${{ secrets.OKTA_OAUTH2_CLIENT_SECRET }}
       run: terraform plan -out=tfplan
 
     - name: Terraform Apply
+      env:
+        TF_VAR_okta_oauth2_client_secret: ${{ secrets.OKTA_OAUTH2_CLIENT_SECRET }}
       run: terraform apply --auto-approve tfplan
 
     - name: Archive Terraform Plan
