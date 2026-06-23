@@ -328,3 +328,29 @@ resource "aws_ecs_service" "app" {
   # Listener must exist before service starts; also ensures correct destroy order
   depends_on = [aws_lb_listener.http]
 }
+
+# 3. Create or Update the Route 53 A Record
+resource "aws_route53_record" "elb_alias" {
+  zone_id = "Z01908031YLBTJZ2HZLNZ"
+  name    = "yuvarajaws.in"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.main.dns_name
+    zone_id                = aws_lb.main.zone_id
+    evaluate_target_health = true
+  }
+}
+
+# 3. Create or Update the Route 53 A Record
+resource "aws_route53_record" "elb_alias" {
+  zone_id = "Z01908031YLBTJZ2HZLNZ"
+  name    = "test2.yuvarajaws.in"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.main.dns_name
+    zone_id                = aws_lb.main.zone_id
+    evaluate_target_health = true
+  }
+}
