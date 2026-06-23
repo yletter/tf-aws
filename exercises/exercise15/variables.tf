@@ -16,6 +16,18 @@ variable "image_uri" {
   default     = "050451371849.dkr.ecr.us-east-1.amazonaws.com/auth0-webapp:latest"
 }
 
+variable "okta_oauth2_issuer" {
+  description = "The Okta OAuth2 issuer URL for the application"
+  type        = string
+  default     = "your-okta-issuer-url"
+}
+
+variable "okta_oauth2_client_id" {
+  description = "The Okta OAuth2 client ID for the application"
+  type        = string
+  default     = "your-okta-client-id"
+}
+
 variable "okta_oauth2_client_secret" {
   description = "The Okta OAuth2 client secret for the application"
   type        = string
@@ -33,6 +45,12 @@ variable "host_port" {
   description = "The port the ALB listens on"
   type        = number
   default     = 80
+}
+
+variable "host_port_ssl" {
+  description = "The port the ALB listens on"
+  type        = number
+  default     = 443
 }
 
 variable "vpc_cidr" {
