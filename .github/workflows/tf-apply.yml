@@ -79,11 +79,15 @@ jobs:
 
     - name: Terraform Plan
       env:
+        TF_VAR_okta_oauth2_issuer: ${{ secrets.OKTA_OAUTH2_ISSUER }}
+        TF_VAR_okta_oauth2_client_id: ${{ secrets.OKTA_OAUTH2_CLIENT_ID }}
         TF_VAR_okta_oauth2_client_secret: ${{ secrets.OKTA_OAUTH2_CLIENT_SECRET }}
       run: terraform plan -out=tfplan
 
     - name: Terraform Apply
       env:
+        TF_VAR_okta_oauth2_issuer: ${{ secrets.OKTA_OAUTH2_ISSUER }}
+        TF_VAR_okta_oauth2_client_id: ${{ secrets.OKTA_OAUTH2_CLIENT_ID }}
         TF_VAR_okta_oauth2_client_secret: ${{ secrets.OKTA_OAUTH2_CLIENT_SECRET }}
       run: terraform apply --auto-approve tfplan
 
