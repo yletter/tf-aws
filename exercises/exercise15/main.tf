@@ -266,7 +266,15 @@ resource "aws_ecs_task_definition" "app" {
       environment = [
         {
           name  = "OKTA_OAUTH2_CLIENT_SECRET"
-          value = "${var.okta_oauth2_client_secret}"
+          value = "${var.OKTA_OAUTH2_CLIENT_SECRET}"
+        },
+        {
+          name  = "OKTA_OAUTH2_CLIENT_ID"
+          value = "${var.OKTA_OAUTH2_CLIENT_ID}"
+        },
+        {
+          name  = "OKTA_OAUTH2_ISSUER"
+          value = "${var.OKTA_OAUTH2_ISSUER}"
         }
       ]
       logConfiguration = {
