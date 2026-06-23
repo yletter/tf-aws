@@ -16,19 +16,19 @@ variable "image_uri" {
   default     = "050451371849.dkr.ecr.us-east-1.amazonaws.com/auth0-webapp:latest"
 }
 
-variable "okta_oauth2_issuer" {
+variable "OKTA_OAUTH2_ISSUER" {
   description = "The Okta OAuth2 issuer URL for the application"
   type        = string
   default     = "your-okta-issuer-url"
 }
 
-variable "okta_oauth2_client_id" {
+variable "OKTA_OAUTH2_CLIENT_ID" {
   description = "The Okta OAuth2 client ID for the application"
   type        = string
   default     = "your-okta-client-id"
 }
 
-variable "okta_oauth2_client_secret" {
+variable "OKTA_OAUTH2_CLIENT_SECRET" {
   description = "The Okta OAuth2 client secret for the application"
   type        = string
   sensitive   = true
