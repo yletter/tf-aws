@@ -330,7 +330,7 @@ resource "aws_ecs_service" "app" {
 }
 
 # 3. Create or Update the Route 53 A Record
-resource "aws_route53_record" "elb_alias" {
+resource "aws_route53_record" "elb_alias1" {
   zone_id = "Z01908031YLBTJZ2HZLNZ"
   name    = "yuvarajaws.in"
   type    = "A"
@@ -343,7 +343,7 @@ resource "aws_route53_record" "elb_alias" {
 }
 
 # 3. Create or Update the Route 53 A Record
-resource "aws_route53_record" "elb_alias" {
+resource "aws_route53_record" "elb_alias2" {
   zone_id = "Z01908031YLBTJZ2HZLNZ"
   name    = "test2.yuvarajaws.in"
   type    = "A"
