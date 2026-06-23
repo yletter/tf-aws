@@ -44,7 +44,9 @@ jobs:
       run:
         working-directory: exercises/${{ github.event.inputs.exercise }}
     env:
-      TF_VAR_okta_oauth2_client_secret: ${{ secrets.OKTA_OAUTH2_CLIENT_SECRET }}
+      TF_VAR_OKTA_OAUTH2_ISSUER: ${{ secrets.OKTA_OAUTH2_ISSUER }}
+      TF_VAR_OKTA_OAUTH2_CLIENT_ID: ${{ secrets.OKTA_OAUTH2_CLIENT_ID }}
+      TF_VAR_OKTA_OAUTH2_CLIENT_SECRET: ${{ secrets.OKTA_OAUTH2_CLIENT_SECRET }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
