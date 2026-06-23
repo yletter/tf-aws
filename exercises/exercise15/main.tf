@@ -78,6 +78,13 @@ resource "aws_security_group" "alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = var.host_port_ssl
+    to_port     = var.host_port_ssl
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -152,6 +159,19 @@ resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
   port              = var.host_port
   protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
+  }
+}
+
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = var.host_port_ssl
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = "arn:aws:acm:us-east-1:050451371849:certificate/e2db1d87-0ee3-4ad9-ac51-3b772d567088"
 
   default_action {
     type             = "forward"
@@ -259,7 +279,15 @@ resource "aws_ecs_task_definition" "app" {
       environment = [
         {
           name  = "OKTA_OAUTH2_CLIENT_SECRET"
-          value = "${var.okta_oauth2_client_secret}"
+          value = "${var.OKTA_OAUTH2_CLIENT_SECRET}"
+        },
+        {
+          name  = "OKTA_OAUTH2_CLIENT_ID"
+          value = "${var.OKTA_OAUTH2_CLIENT_ID}"
+        },
+        {
+          name  = "OKTA_OAUTH2_ISSUER"
+          value = "${var.OKTA_OAUTH2_ISSUER}"
         }
       ]
       logConfiguration = {
@@ -299,4 +327,30 @@ resource "aws_ecs_service" "app" {
 
   # Listener must exist before service starts; also ensures correct destroy order
   depends_on = [aws_lb_listener.http]
+}
+
+# 3. Create or Update the Route 53 A Record
+resource "aws_route53_record" "elb_alias1" {
+  zone_id = "Z01908031YLBTJZ2HZLNZ"
+  name    = "yuvarajaws.in"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.main.dns_name
+    zone_id                = aws_lb.main.zone_id
+    evaluate_target_health = true
+  }
+}
+
+# 3. Create or Update the Route 53 A Record
+resource "aws_route53_record" "elb_alias2" {
+  zone_id = "Z01908031YLBTJZ2HZLNZ"
+  name    = "test2.yuvarajaws.in"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.main.dns_name
+    zone_id                = aws_lb.main.zone_id
+    evaluate_target_health = true
+  }
 }

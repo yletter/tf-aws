@@ -1,41 +1,72 @@
-# AWS ECS Service Deployment
+# Exercise 15: ECS Fargate Deployment with ALB
 
-This Terraform configuration deploys a Docker container to an AWS Elastic Container Service (ECS) Fargate cluster. It sets up the necessary networking components, an Application Load Balancer (ALB), and the ECS Task Definition/Service required to run the container.
+Deploy a containerized application to AWS ECS Fargate with complete networking infrastructure and Application Load Balancer.
 
-## Features
+## Overview
 
-- **Networking:** Creates a new VPC, Internet Gateway, Route Tables, and two public subnets for High Availability.
-- **ALB:** Configures an Application Load Balancer listening on port 80, routing traffic to port 8080 on the ECS containers.
-- **ECS Cluster:** Creates a Fargate-compatible ECS cluster named `test-python`.
-- **ECS Task & Service:** Runs the specified container image, exposes port 8080, injects the `PYTHON_ENV="PROD"` environment variable, and configures CloudWatch logging.
+This Terraform configuration provisions:
+- VPC with Internet Gateway and public subnets across 2 availability zones
+- Application Load Balancer (ALB) listening on port 80
+- Security groups for ALB and ECS tasks
+- ECS Fargate cluster and task definition
+- CloudWatch Log Group for application logs
+- Remote state management via S3 backend
 
-## Prerequisites
+## Architecture
 
-- Terraform CLI installed.
-- AWS CLI installed and configured with credentials for `us-east-1` (or your desired region).
+```
+Internet
+   ↓
+ALB (Port 80)
+   ↓
+Security Group (ALB)
+   ↓
+ECS Service (Port 3000)
+   ↓
+ECS Task Definition (Container)
+   ↓
+CloudWatch Logs
+```
 
-## Usage
+## Configuration Files
 
-1. Initialize the Terraform workspace:
-   ```sh
-   terraform init
-   ```
+| File | Purpose |
+|------|---------|
+| `main.tf` | VPC, networking, ALB, ECS cluster, task definition, and service |
+| `variables.tf` | Input variables with defaults |
+| `outputs.tf` | Output values (ALB DNS name) |
+| `backend.tf` | S3 remote state backend configuration |
 
-2. Review the planned changes:
-   ```sh
-   terraform plan
-   ```
+## Key Variables
 
-3. Apply the configuration to create the resources:
-   ```sh
-   terraform apply
-   ```
+- `aws_region`: AWS region (default: `us-east-1`)
+- `cluster_name`: ECS cluster name (default: `auth0-webapp`)
+- `image_uri`: Docker image URI for the container
+- `container_port`: Container application port (default: `3000`)
+- `host_port`: ALB listener port (default: `80`)
+- `vpc_cidr`: VPC CIDR block (default: `10.0.0.0/16`)
+- `subnet_cidrs`: Public subnet CIDR blocks (default: `10.0.1.0/24`, `10.0.2.0/24`)
 
-4. **Access the application:** Once the deployment finishes, Terraform will output the `alb_dns_name`. You can copy that DNS name and paste it into your browser to access the service.
+## Deployment
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+## Accessing the Application
+
+After deployment, retrieve the ALB DNS name:
+
+```bash
+terraform output alb_dns_name
+```
+
+Open the DNS name in a browser to access the application.
 
 ## Cleanup
 
-To avoid incurring ongoing charges, destroy the infrastructure when you are done:
-```sh
+```bash
 terraform destroy
 ```
