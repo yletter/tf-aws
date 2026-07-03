@@ -82,6 +82,15 @@ resource "aws_cognito_user_pool_client" "bridge_client" {
   user_pool_id        = aws_cognito_user_pool.mainpool.id
   explicit_auth_flows = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH"]
 
+  callback_urls = [
+    "http://localhost:8080/login/oauth2/code/auth0",
+    "https://d84l1y8p4kdic.cloudfront.net"
+  ]
+
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_flows                  = ["code"]
+  allowed_oauth_scopes                 = ["email", "openid", "phone"]
+
   # Supported identity providers
   supported_identity_providers = ["auth0", "COGNITO"]
 
