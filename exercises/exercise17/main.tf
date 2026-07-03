@@ -92,7 +92,7 @@ resource "aws_cognito_user_pool_client" "bridge_client" {
   allowed_oauth_scopes                 = ["email", "openid", "phone"]
 
   # Supported identity providers
-  supported_identity_providers = ["auth0", "COGNITO"]
+  supported_identity_providers = ["auth0"] # , "COGNITO"]
 
   # Token expiration times
   access_token_validity  = 60
