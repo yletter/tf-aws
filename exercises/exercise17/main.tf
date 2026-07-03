@@ -50,6 +50,11 @@ resource "aws_cognito_user_pool" "mainpool" {
   }
 }
 
+resource "aws_cognito_user_pool_domain" "mainpool_domain" {
+  domain       = var.cognito_domain_prefix
+  user_pool_id = aws_cognito_user_pool.mainpool.id
+}
+
 # Cognito Identity Provider - SAML (Auth0)
 resource "aws_cognito_identity_provider" "auth0_saml" {
   user_pool_id  = aws_cognito_user_pool.mainpool.id

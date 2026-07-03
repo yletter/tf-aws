@@ -9,3 +9,9 @@ variable "saml_metadata_file" {
   type        = string
   default     = "saml-metadata.xml"
 }
+
+variable "cognito_domain_prefix" {
+  description = "Prefix for the Cognito hosted login domain"
+  type        = string
+  default     = "mainpool-exercise17"
+}
