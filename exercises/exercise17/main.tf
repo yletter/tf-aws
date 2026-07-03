@@ -66,11 +66,11 @@ resource "aws_cognito_identity_provider" "auth0_saml" {
   }
 
   attribute_mapping = {
-    email       = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-    name        = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-    family_name = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"
-    given_name  = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
-    username    = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+    email       = "email"
+    name        = "name"
+    family_name = "name"
+    given_name  = "name"
+    username    = "username"
   }
 
   depends_on = [aws_cognito_user_pool.mainpool]
