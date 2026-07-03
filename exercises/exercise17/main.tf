@@ -42,7 +42,7 @@ resource "aws_cognito_user_pool" "mainpool" {
   }
 
   # MFA configuration
-  mfa_configuration = "OPTIONAL"
+  mfa_configuration = "OFF"
 
   tags = {
     Environment = "production"
