@@ -57,7 +57,7 @@ resource "aws_cognito_identity_provider" "auth0_saml" {
   provider_type = "SAML"
 
   provider_details = {
-    MetadataURL = "file://${abspath("${path.module}/${var.saml_metadata_file}")}" 
+    MetadataFile = file("${path.module}/${var.saml_metadata_file}")
   }
 
   attribute_mapping = {
