@@ -1,0 +1,66 @@
+variable "aws_region" {
+  description = "The AWS region to create resources in"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "cluster_name" {
+  description = "The name of the ECS cluster"
+  type        = string
+  default     = "auth0-webapp"
+}
+
+variable "image_uri" {
+  description = "The Docker image URI to run in the ECS task"
+  type        = string
+  default     = "050451371849.dkr.ecr.us-east-1.amazonaws.com/auth0-webapp:latest"
+}
+
+variable "OKTA_OAUTH2_ISSUER" {
+  description = "The Okta OAuth2 issuer URL for the application"
+  type        = string
+  default     = "your-okta-issuer-url"
+}
+
+variable "OKTA_OAUTH2_CLIENT_ID" {
+  description = "The Okta OAuth2 client ID for the application"
+  type        = string
+  default     = "your-okta-client-id"
+}
+
+variable "OKTA_OAUTH2_CLIENT_SECRET" {
+  description = "The Okta OAuth2 client secret for the application"
+  type        = string
+  sensitive   = true
+  default     = "your-okta-client-secret"
+}
+
+variable "container_port" {
+  description = "The port the container exposes"
+  type        = number
+  default     = 3000
+}
+
+variable "host_port" {
+  description = "The port the ALB listens on"
+  type        = number
+  default     = 80
+}
+
+variable "host_port_ssl" {
+  description = "The port the ALB listens on"
+  type        = number
+  default     = 443
+}
+
+variable "vpc_cidr" {
+  description = "CIDR block for the VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
+variable "subnet_cidrs" {
+  description = "CIDR blocks for public subnets"
+  type        = list(string)
+  default     = ["10.0.1.0/24", "10.0.2.0/24"]
+}
