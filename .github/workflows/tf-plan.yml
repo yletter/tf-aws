@@ -1,4 +1,4 @@
-name: Terraform AWS Apply
+name: Terraform AWS Plan
 
 on:
   push:
