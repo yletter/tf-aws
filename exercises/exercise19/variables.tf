@@ -28,6 +28,12 @@ variable "container_name" {
   default     = "hello"
 }
 
+variable "container_port" {
+  description = "Port of the container in the task definition"
+  type        = number
+  default     = 80
+}
+
 variable "container_image" {
   description = "Container image to run"
   type        = string

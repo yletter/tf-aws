@@ -74,7 +74,7 @@ resource "aws_ecs_task_definition" "main" {
       name      = var.container_name
       image     = var.container_image
       essential = true
-      command   = ["sh", "-c", "echo ECS task started; sleep 3600"]
+      command   = ["sh", "-c", "echo ECS task started; sleep 360000"]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -92,4 +92,30 @@ resource "aws_ecs_task_definition" "main" {
 resource "aws_cloudwatch_log_group" "task" {
   name              = "/ecs/${var.task_family}"
   retention_in_days = 1
+}
+
+
+resource "aws_ecs_service" "app" {
+  name            = "${var.cluster_name}-service"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.main.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  # Allow tasks to be stopped immediately on destroy (no need to keep min healthy)
+  deployment_minimum_healthy_percent = 0
+  deployment_maximum_percent         = 200
+
+  network_configuration {
+    subnets          = [data.aws_subnets.default.ids]
+    security_groups  = [data.aws_security_group.default.id]
+    assign_public_ip = true
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.app.arn
+    container_name   = var.cluster_name
+    container_port   = var.container_port
+  }
+
 }
