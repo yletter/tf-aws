@@ -61,6 +61,40 @@ resource "aws_iam_role_policy_attachment" "task_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+resource "aws_iam_role" "task" {
+  name = "${var.project_name}-ecs-task"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = "sts:AssumeRole"
+      Principal = {
+        Service = "ecs-tasks.amazonaws.com"
+      }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "task_exec" {
+  name = "${var.project_name}-ecs-exec"
+  role = aws_iam_role.task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "ssmmessages:CreateControlChannel",
+        "ssmmessages:CreateDataChannel",
+        "ssmmessages:OpenControlChannel",
+        "ssmmessages:OpenDataChannel"
+      ]
+      Resource = "*"
+    }]
+  })
+}
+
 resource "aws_ecs_task_definition" "main" {
   family                   = var.task_family
   requires_compatibilities = ["FARGATE"]
@@ -68,6 +102,7 @@ resource "aws_ecs_task_definition" "main" {
   cpu                      = var.task_cpu
   memory                   = var.task_memory
   execution_role_arn       = aws_iam_role.task_execution.arn
+  task_role_arn            = aws_iam_role.task.arn
 
   container_definitions = jsonencode([
     {
@@ -86,7 +121,10 @@ resource "aws_ecs_task_definition" "main" {
     }
   ])
 
-  depends_on = [aws_iam_role_policy_attachment.task_execution]
+  depends_on = [
+    aws_iam_role_policy_attachment.task_execution,
+    aws_iam_role_policy.task_exec
+  ]
 }
 
 resource "aws_cloudwatch_log_group" "task" {
@@ -101,6 +139,7 @@ resource "aws_ecs_service" "app" {
   task_definition = aws_ecs_task_definition.main.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+  enable_execute_command = true
 
   # Allow tasks to be stopped immediately on destroy (no need to keep min healthy)
   deployment_minimum_healthy_percent = 0
