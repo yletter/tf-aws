@@ -107,7 +107,7 @@ resource "aws_ecs_service" "app" {
   deployment_maximum_percent         = 200
 
   network_configuration {
-    subnets          = [data.aws_subnets.default.ids]
+    subnets          = data.aws_subnets.default.ids
     security_groups  = [data.aws_security_group.default.id]
     assign_public_ip = true
   }
