@@ -112,10 +112,4 @@ resource "aws_ecs_service" "app" {
     assign_public_ip = true
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.app.arn
-    container_name   = var.cluster_name
-    container_port   = var.container_port
-  }
-
 }
