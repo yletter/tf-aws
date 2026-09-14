@@ -11,7 +11,7 @@ output "subnet2_id" {
 }
 
 output "web_instance_public_ip" {
-  value = aws_instance.web.public_ip
+  value = aws_instance.web1.public_ip
 }
 
 output "web_app_wait_command" {
