@@ -1,13 +1,13 @@
 output "vpc_id" {
-  value = aws_vpc.main.id
+  value = aws_vpc.main1.id
 }
 
 output "subnet1_id" {
-  value = aws_subnet.subnet1.id
+  value = aws_subnet.subnet11.id
 }
 
 output "subnet2_id" {
-  value = aws_subnet.subnet2.id
+  value = aws_subnet.subnet12.id
 }
 
 output "web_instance_public_ip" {
