@@ -33,7 +33,7 @@ resource "aws_vpc" "main2" {
 }
 
 resource "aws_subnet" "subnet11" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.main1.id
   cidr_block        = "10.1.1.0/24"
   availability_zone = var.availability_zones[0]
 
@@ -44,7 +44,7 @@ resource "aws_subnet" "subnet11" {
 }
 
 resource "aws_subnet" "subnet12" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.main1.id
   cidr_block        = "10.1.2.0/24"
   availability_zone = var.availability_zones[1]
 
@@ -55,7 +55,7 @@ resource "aws_subnet" "subnet12" {
 }
 
 resource "aws_subnet" "subnet21" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.main2.id
   cidr_block        = "10.2.1.0/24"
   availability_zone = var.availability_zones[0]
 
@@ -66,7 +66,7 @@ resource "aws_subnet" "subnet21" {
 }
 
 resource "aws_subnet" "subnet22" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.main2.id
   cidr_block        = "10.2.2.0/24"
   availability_zone = var.availability_zones[1]
 
