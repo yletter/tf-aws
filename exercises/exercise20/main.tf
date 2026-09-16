@@ -43,16 +43,16 @@ resource "aws_subnet" "subnet11" {
   }
 }
 
-resource "aws_subnet" "subnet12" {
-  vpc_id            = aws_vpc.main1.id
-  cidr_block        = "10.1.2.0/24"
-  availability_zone = var.availability_zones[1]
-
-  tags = {
-    Name = "Subnet2"
-    Type = "Public"
-  }
-}
+#resource "aws_subnet" "subnet12" {
+#  vpc_id            = aws_vpc.main1.id
+#  cidr_block        = "10.1.2.0/24"
+#  availability_zone = var.availability_zones[1]
+#
+#  tags = {
+#    Name = "Subnet2"
+#    Type = "Public"
+#  }
+#}
 
 resource "aws_subnet" "subnet21" {
   vpc_id            = aws_vpc.main2.id
@@ -65,16 +65,16 @@ resource "aws_subnet" "subnet21" {
   }
 }
 
-resource "aws_subnet" "subnet22" {
-  vpc_id            = aws_vpc.main2.id
-  cidr_block        = "10.2.2.0/24"
-  availability_zone = var.availability_zones[1]
-
-  tags = {
-    Name = "Subnet2"
-    Type = "Public"
-  }
-}
+#resource "aws_subnet" "subnet22" {
+#  vpc_id            = aws_vpc.main2.id
+#  cidr_block        = "10.2.2.0/24"
+#  availability_zone = var.availability_zones[1]
+#
+#  tags = {
+#    Name = "Subnet2"
+#    Type = "Public"
+#  }
+#}
 
 resource "aws_internet_gateway" "main1" {
   vpc_id = aws_vpc.main1.id
@@ -125,20 +125,20 @@ resource "aws_route_table_association" "rta11" {
   route_table_id = aws_route_table.rt1.id
 }
 
-resource "aws_route_table_association" "rta12" {
-  subnet_id      = aws_subnet.subnet12.id
-  route_table_id = aws_route_table.rt1.id
-}
+#resource "aws_route_table_association" "rta12" {
+#  subnet_id      = aws_subnet.subnet12.id
+#  route_table_id = aws_route_table.rt1.id
+#}
 
 resource "aws_route_table_association" "rta21" {
   subnet_id      = aws_subnet.subnet21.id
   route_table_id = aws_route_table.rt2.id
 }
 
-resource "aws_route_table_association" "rta22" {
-  subnet_id      = aws_subnet.subnet22.id
-  route_table_id = aws_route_table.rt2.id
-}
+#resource "aws_route_table_association" "rta22" {
+#  subnet_id      = aws_subnet.subnet22.id
+#  route_table_id = aws_route_table.rt2.id
+#}
 
 resource "aws_security_group" "webserver1" {
   name        = "Webserver1"
@@ -270,27 +270,27 @@ EOF
   }
 }
 
-## 1. Create the VPC Peering Connection
-#resource "aws_vpc_peering_connection" "main1_to_main2" {
-#  vpc_id        = aws_vpc.main1.id
-#  peer_vpc_id   = aws_vpc.main2.id
-#  auto_accept   = true
-#
-#  tags = {
-#    Name = "peer-main1-to-main2"
-#  }
-#}
-#
-## 2. Add Route in VPC main1's Route Table pointing to VPC main2
-#resource "aws_route" "main1_to_main2_route" {
-#  route_table_id            = aws_vpc.main1.main_route_table_id
-#  destination_cidr_block    = aws_vpc.main2.cidr_block
-#  vpc_peering_connection_id = aws_vpc_peering_connection.main1_to_main2.id
-#}
-#
-## 3. Add Route in VPC main2's Route Table pointing to VPC main1
-#resource "aws_route" "aws_route_main2_to_main1" {
-#  route_table_id            = aws_vpc.main2.main_route_table_id
-#  destination_cidr_block    = aws_vpc.main1.cidr_block
-#  vpc_peering_connection_id = aws_vpc_peering_connection.main1_to_main2.id
-#}
+# 1. Create the VPC Peering Connection
+resource "aws_vpc_peering_connection" "main1_to_main2" {
+  vpc_id        = aws_vpc.main1.id
+  peer_vpc_id   = aws_vpc.main2.id
+  auto_accept   = true
+
+  tags = {
+    Name = "peer-main1-to-main2"
+  }
+}
+
+# 2. Add Route in VPC main1's Route Table pointing to VPC main2
+resource "aws_route" "main1_to_main2_route" {
+  route_table_id            = aws_route_table_association.rta11.route_table_id
+  destination_cidr_block    = aws_vpc.main2.cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.main1_to_main2.id
+}
+
+# 3. Add Route in VPC main2's Route Table pointing to VPC main1
+resource "aws_route" "aws_route_main2_to_main1" {
+  route_table_id            = aws_route_table_association.rta21.route_table_id
+  destination_cidr_block    = aws_vpc.main1.cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.main1_to_main2.id
+}
