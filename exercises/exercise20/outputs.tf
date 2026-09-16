@@ -6,10 +6,6 @@ output "subnet1_id" {
   value = aws_subnet.subnet11.id
 }
 
-output "subnet2_id" {
-  value = aws_subnet.subnet12.id
-}
-
 output "web_instance_public_ip" {
   value = aws_instance.web1.public_ip
 }
