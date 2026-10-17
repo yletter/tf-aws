@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "ap-south-1" # Mumbai
+  region = "us-east-1"
 }
 
 # Latest Amazon Linux 2023 image for ARM64/Graviton.
@@ -75,6 +75,12 @@ resource "aws_iam_instance_profile" "ec2_ssm" {
 resource "aws_instance" "word_ai" {
   ami                    = data.aws_ssm_parameter.amazon_linux_arm64.value
   instance_type          = "t4g.medium"
+  instance_market_options {
+    market_type = "spot"
+    spot_options {
+      instance_interruption_behavior = "terminate"
+    }
+  }
   subnet_id              = tolist(data.aws_subnets.default_vpc.ids)[0]
   vpc_security_group_ids = [aws_security_group.ai_server.id]
   iam_instance_profile   = aws_iam_instance_profile.ec2_ssm.name
