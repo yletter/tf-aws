@@ -74,7 +74,7 @@ resource "aws_iam_instance_profile" "ec2_ssm" {
 
 resource "aws_instance" "word_ai" {
   ami                    = data.aws_ssm_parameter.amazon_linux_arm64.value
-  instance_type          = "g4dn.xlarge" # "t4g.medium"
+  instance_type          = "r7i.xlarge" # XX"g4dn.xlarge" # "t4g.medium"
   #instance_market_options {
   #  market_type = "spot"
   #  spot_options {
