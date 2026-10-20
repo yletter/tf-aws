@@ -74,7 +74,7 @@ resource "aws_iam_instance_profile" "ec2_ssm" {
 
 resource "aws_instance" "word_ai" {
   ami                    = data.aws_ssm_parameter.amazon_linux_arm64.value
-  instance_type          = "t4g.medium"
+  instance_type          = "g4dn.xlarge" # "t4g.medium"
   #instance_market_options {
   #  market_type = "spot"
   #  spot_options {
@@ -119,10 +119,11 @@ resource "aws_instance" "word_ai" {
     # Small model appropriate for word meanings and example sentences.
     export HOME=/root
     /usr/local/bin/ollama pull qwen2.5:1.5b
+    /usr/local/bin/ollama pull qwen2.5:14b
   EOF
 
   tags = {
-    Name = "word-ai-t4g-medium"
+    Name = "word-ai-g4dn-xlarge"
   }
 }
 
