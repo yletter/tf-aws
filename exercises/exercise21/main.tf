@@ -75,12 +75,19 @@ resource "aws_iam_instance_profile" "ec2_ssm" {
 resource "aws_instance" "word_ai" {
   ami                    = data.aws_ssm_parameter.amazon_linux_arm64.value
   instance_type          = "t4g.medium"
-  instance_market_options {
-    market_type = "spot"
-    spot_options {
-      instance_interruption_behavior = "terminate"
-    }
+  #instance_market_options {
+  #  market_type = "spot"
+  #  spot_options {
+  #    instance_interruption_behavior = "terminate"
+  #  }
+  #}
+
+  timeouts {
+    create = "5m"
+    update = "5m"
+    delete = "5m"
   }
+
   subnet_id              = tolist(data.aws_subnets.default_vpc.ids)[0]
   vpc_security_group_ids = [aws_security_group.ai_server.id]
   iam_instance_profile   = aws_iam_instance_profile.ec2_ssm.name
