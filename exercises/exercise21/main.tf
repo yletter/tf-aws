@@ -96,7 +96,7 @@ resource "aws_instance" "word_ai" {
     set -euxo pipefail
 
     dnf update -y
-    dnf install -y curl
+    dnf install -y curl --skip-broken
 
     # Installs the ARM64-compatible Ollama server.
     curl -fsSL https://ollama.com/install.sh | sh
