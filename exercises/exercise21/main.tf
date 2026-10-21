@@ -119,7 +119,7 @@ resource "aws_instance" "word_ai" {
     # Small model appropriate for word meanings and example sentences.
     export HOME=/root
     /usr/local/bin/ollama pull qwen2.5:1.5b
-    /usr/local/bin/ollama pull qwen2.5:14b
+    /usr/local/bin/ollama pull llama3.2:latest
   EOF
 
   tags = {
